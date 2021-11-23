@@ -53,9 +53,8 @@ def preprocess(filename, mode="fast"):
             for i in countings_list:
                 result_2.write(str(i[1]) + " ")
                 result_2.write(i[0])
-            countings_list.sort(key=lambda x: x[1])
-            for i in countings_list:
-                result_1.write(str(i[1]) + "\n")
+            for i in range(len(countings_list)-1,-1,-1):
+                result_1.write(str(countings_list[i][1]) + "\n")
 
     os.remove("trimmed.txt")
     return
@@ -134,5 +133,3 @@ def overrepresented_sequences(filename): # will be taking nothing when Anays var
     read_source = ["No hit"] * len(read_sequence)
     os.remove("counted_reads_reverse.txt")
     return (read_sequence, read_count, read_percentage,read_source)
-
-preprocess("reads.fastq")

@@ -17,7 +17,7 @@ def plot_table_of_overrepresent(read_sequence, read_count, read_percentage,read_
                        font=dict(color='black', family="Times New Roman", size=12)),
             columnwidth=[0.3, 0.04, 0.09, 0.08])
         ])
-        fig.update_layout(width=890, height=1000)
+        fig.update_layout(width=890, height=235+20*len(read_sequence))
         fig.write_image("overrepresented.png")
         return
     plt.figure(figsize=(4, 1))
