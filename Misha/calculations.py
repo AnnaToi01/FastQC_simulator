@@ -2,24 +2,43 @@ import numpy as np
 import statistics
 
 
-def calculate_gc(sequences_list):
+def calculate_read_length(path_to_file):
+    '''
+    Calculate read length distribution
+    :param path_to_file: str, path to fastq file
+    :return:
+            length_dic: dic, read_length:count
+            max_length: int, maximum read length
+            min_length: int, minimum read length
+            total_reads: int, total count of reads
+    '''
+    length_dic = {}
+
     gc_content_list = []
-    for sequence in sequences_list:
-        gc_content_list.append((sequence.lower().count('g') + sequence.lower().count('c')) * 100 / len(sequence))
-    GC_mean = round(statistics.mean(gc_content_list), 2)
-    print(f'GC mean = {GC_mean}')
-    return gc_content_list, GC_mean
-
-
-def get_nucleotide_per_position(sequences_list):
     nucleotide_per_position_dic = {}
-    for sequence in sequences_list:
-        for position_number in range(len(sequence)):
-            if position_number in nucleotide_per_position_dic:
-                nucleotide_per_position_dic[position_number].append(sequence[position_number])
-            else:
-                nucleotide_per_position_dic[position_number] = [sequence[position_number]]
-    return nucleotide_per_position_dic
+
+    with open(path_to_file, 'r') as fastq_file:
+        total_reads = 0
+        for line_num, sequence in enumerate(fastq_file):
+            if line_num % 4 == 1:
+                total_reads += 1
+                length = len(sequence.strip())
+                length_dic[length] = length_dic.get(length, 0) + 1
+
+                gc_content_list.append((sequence.lower().count('g') + sequence.lower().count('c')) * 100 /
+                                       len(sequence))
+
+                for position_number in range(len(sequence)):
+                    if position_number in nucleotide_per_position_dic:
+                        nucleotide_per_position_dic[position_number].append(sequence[position_number])
+                    else:
+                        nucleotide_per_position_dic[position_number] = [sequence[position_number]]
+
+        GC_mean = round(statistics.mean(gc_content_list), 2)
+
+    max_length = max(length_dic, key=int)
+    min_length = min(length_dic, key=int)
+    return length_dic, max_length, min_length, total_reads, gc_content_list, GC_mean, nucleotide_per_position_dic
 
 
 def get_nucleotide_content(nucleotide_per_position_dic):
@@ -66,8 +85,8 @@ def make_GC_content_and_GC_theoretical_have_equal_length(gc_theor_dic_rounded, g
     return gc_theor_dic_rounded, gc_dic_rounded
 
 
-def make_nucleotide_and_gc_calculations(sequences_list, gc_content_list):
-    nucleotide_content_per_base = get_nucleotide_content(get_nucleotide_per_position(sequences_list))
+def make_nucleotide_and_gc_calculations(gc_content_list, nucleotide_per_position_dic):
+    nucleotide_content_per_base = get_nucleotide_content(nucleotide_per_position_dic)
 
     GC_theoretical_distribution = get_GC_theoretical_distribution(gc_content_list)
 
