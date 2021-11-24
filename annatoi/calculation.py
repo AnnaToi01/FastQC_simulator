@@ -144,3 +144,71 @@ def basic_statistics(path_to_file, lowest_char, mean_gc_content, min_length, max
     )
 
     return basicstats, offset, encoding
+
+
+def tile_sequence(path_to_file, max_length):
+    """
+    Generates dictionary for plotting of tile sequence quality
+    :param path_to_file: path to file
+    :param max_length: maximum read length
+    :return:
+            tile_quality: dic, tile_number: array(average quality per position)
+    """
+    tile_quality = {}
+    tile_count = {}
+
+    def quality_per_position(qual_sequence, max_length):
+        """
+        Returns array with the ASCII order of symbols in a sequence
+        :param qual_sequence: sequence of letters
+        :param max_length: maximum read length
+        :return:
+                qual_array: np.array, array of ASCII order of symbol in each position
+        """
+        qual_array = np.zeros(max_length)
+        for i, symbol in enumerate(qual_sequence):
+            qual_array[i] = ord(symbol)
+        return qual_array
+
+    with open(path_to_file, "r") as fastq_file:
+        for line_num, qual_sequence in enumerate(fastq_file):
+            if line_num % 4 == 0:
+                try:
+                    tile_num = qual_sequence.split(":")[4]  # get tile number in sequence identity
+                except IndexError:
+                    return  # Sometimes no tile numbers included, tile sequence not generated then
+
+            elif line_num % 4 == 3:
+                qual_sequence = qual_sequence.strip()  # get quality sequence
+                len_qual = len(qual_sequence)  # length of quality sequence
+                # For each tile number generate array with counts of positions included in counting
+                tile_count[tile_num] = tile_count.get(tile_num, np.zeros(max_length)) + \
+                                       np.array([1] * (len_qual) + [0] * (max_length - len_qual))
+                # For each tile number generate array with sum of qualities per position
+                tile_quality[tile_num] = tile_quality.get(tile_num, np.zeros(max_length)) + \
+                                         quality_per_position(qual_sequence, max_length)
+    # Ignore some errors
+    # np.seterr(invalid='ignore')
+    # Normalizing the quality per count
+    lowest_char = "#"
+    min_num = ord(lowest_char)
+    for tile_num in tile_count.keys():
+        tile_count_array = np.where(tile_count[tile_num] == 0, 1, tile_count[tile_num])
+        tile_quality_array = np.where(tile_quality[tile_num] == 0, min_num, tile_quality[tile_num])
+
+        tile_quality[tile_num] = np.divide(tile_quality_array, tile_count_array)
+
+    # Normalizing quality per position in whole tile - create array where quality per position is summed up
+    av_qual_position = np.zeros(max_length)
+    for tile_num in tile_quality.keys():
+        for i in range(max_length):
+            av_qual_position[i] += tile_quality[tile_num][i]
+    # Normalize the generated array by the number of tiles -> average quality per position
+    for i in range(max_length):
+        av_qual_position[i] /= len(tile_quality.keys())
+    # Comparing the generated tile_quality array to the means per position by subtracting
+    for tile_num in tile_quality.keys():
+        for i in range(max_length):
+            tile_quality[tile_num][i] -= av_qual_position[i]
+
+    return tile_quality

@@ -61,7 +61,7 @@ def plot_length_distribution(length_distribution_dic):
     plt.title("Distribution of sequence lengths over all sequences")
     plt.xlabel("Sequence length")
     plt.savefig("sequence_length_distribution.png")
-    plt.show()
+    # plt.show()
 
 
 def plot_adapters_content(adapters_count, plot_edge):
@@ -90,4 +90,99 @@ def plot_adapters_content(adapters_count, plot_edge):
     plt.title("% Adapter")
     plt.xlabel("Position in read (bp)")
     plt.savefig("adapter_content.png")
-    plt.show()
+    # plt.show()
+
+
+def plot_tile_sequence(tile_quality, max_length):
+    """
+    Plots per tile sequence quality
+    :param tile_quality: dic, tile_number: array(average quality per position)
+    :return: None, saves the generated figure and shows it
+    """
+
+    def makeColors():
+        """
+        Generates color palette
+        :return:
+            colors: list, color palette
+        """
+        min_num = 0 - 50 ** 0.5
+        max_num = (99 - 50) ** 0.5
+        colors = [0] * 100
+        for c in range(100):
+            actualC = c - 50
+            if actualC < 0:
+                actualC = 0 - actualC
+            corrected = actualC ** 0.5
+            if c < 50 and corrected > 0:
+                corrected = 0 - corrected
+            r, g, b = getRGB(corrected, min_num, max_num)
+            colors[c] = [r, g, b]
+        return colors
+
+
+    def getColor(value, min_num, max_num):
+        """
+        Gets the color of the specific tile
+        :param value: average quality value
+        :param min_num: int, 0
+        :param max_num: int, 10
+        :return:
+                color: list, of the corresponding tile
+        """
+        colors = makeColors()
+        percentage = int(100 * (value - min_num) / (max_num - min_num))
+        if percentage > 100:
+            percentage = 100
+        if percentage < 1:
+            percentage = 1
+
+        return colors[percentage - 1]
+
+
+    def getRGB(value, min_num, max_num):
+        """
+        Generates tuple of RGV
+        :param value: color value
+        :param min_num: minimal value, 0 - 50 ** 0.5
+        :param max_num: maximal value, (99 - 50) ** 0.5
+        :return: tuple, RGB: r - red, g - green, b - blue
+        """
+        diff = max_num - min_num
+        if value < (min_num + diff * 0.25):
+            red = 0
+            blue = 200
+            green = int(200 * ((value - min_num) / (diff * 0.25)))
+        elif value < (min_num + diff * 0.5):
+            red = 0
+            green = 200
+            blue = int(200 - (200 * ((value - (min_num + (diff * 0.25))) / (diff * 0.25))))
+        elif value < (min_num + diff * 0.75):
+            green = 200
+            blue = 0
+            red = int(200 * ((value - (min_num + (diff * 0.5))) / (diff * 0.25)))
+        else:
+            red = 200
+            blue = 0
+            green = int(200 - (200 * ((value - (min_num + (diff * 0.75))) / (diff * 0.25))))
+        return red, green, blue
+
+
+    fig = plt.figure(figsize=(20, 20))
+    ax = plt.subplot(111)
+
+    for i, nmtile in enumerate(tile_quality.keys()):
+        # length = np.count_nonzero(~np.isnan(tile_quality[nmtile]))
+        for j in range(max_length):
+            color = getColor(-tile_quality[nmtile][j], 0, 10)
+            im = Image.new('RGB', (1, 1), tuple(color))
+            plt.imshow(im, aspect='equal', extent=np.array([j, j + 1, i, i + 1]), interpolation="nearest")
+
+    plt.xlim(0, max_length)
+    plt.ylim(0, len(tile_quality.keys()))
+    plt.xticks(np.arange(1, max_length + 1, 5))
+    labels = list(tile_quality.keys())[::2]
+    ax.set_yticks(np.arange(len(tile_quality.keys()))[::2])
+    ax.set_yticklabels(labels)
+    plt.savefig("tile_sequence.png")
+
