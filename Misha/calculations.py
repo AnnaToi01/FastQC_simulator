@@ -5,8 +5,9 @@ import statistics
 def calculate_gc(sequences_list):
     gc_content_list = []
     for sequence in sequences_list:
-        gc_content_list.append(sequence.lower().count('g') + sequence.lower().count('c') * 100 / len(sequence))
+        gc_content_list.append((sequence.lower().count('g') + sequence.lower().count('c')) * 100 / len(sequence))
     GC_mean = round(statistics.mean(gc_content_list), 2)
+    print(f'GC mean = {GC_mean}')
     return gc_content_list, GC_mean
 
 
