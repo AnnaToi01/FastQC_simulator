@@ -76,4 +76,4 @@ def make_nucleotide_and_gc_calculations(sequences_list, gc_content_list):
 
     gc_theor_dic_rounded, gc_dic_rounded = make_GC_content_and_GC_theoretical_have_equal_length(gc_theor_dic_rounded,
                                                                                                 gc_dic_rounded)
-    return nucleotide_content_per_base, gc_theor_dic_rounded, gc_dic_rounded
+    return nucleotide_content_per_base, gc_dic_rounded, gc_theor_dic_rounded
