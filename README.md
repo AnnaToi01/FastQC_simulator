@@ -1,6 +1,6 @@
 # FastQC Simulator
 
-FastQC is a program designed to do the quality control on raw sequence data coming from high throughput sequencers. The program evaluates the quality of reads in different analysis modules, providing various statistics plots about the quality of reads. This program replicates the original [FastQC](https://github.com/s-andrews/FastQC/tree/fdc27fe360af44dc675e7d67bc3ec89c21f273e6) program written in Java and released in 2010, making it available in Python. 
+FastQC is a program designed to do the quality control on raw sequence data coming from high throughput sequencers. The program evaluates the quality of reads in different analysis modules, providing various statistics plots about the quality of reads. This program replicates the original [FastQC](https://github.com/s-andrews/FastQC/tree/fdc27fe360af44dc675e7d67bc3ec89c21f273e6) program written in Java and released in 2010, making it available in Python.
 
 ## Table of Contents
 1. [Team: Fasta and Curious](#Team)
