@@ -12,12 +12,13 @@ def make_nucleotide_content_df(nucleotide_content_per_base):
     :return:
             nucleotide_content_per_base_df: pandas DataFrame, Position in read (bp), Nucleotide content per position (%)
     '''
-    position_number_list = [i + 1 for i in range(len(nucleotide_content_per_base['A']))]
+    position_number_list =\
+        [i + 1 for i in range(len(nucleotide_content_per_base[list(nucleotide_content_per_base.keys())[0]][:-1]))]
     nucleotide_content_per_base_df = pd.DataFrame({"Position": position_number_list,
-                                                   "A": nucleotide_content_per_base['A'],
-                                                   "C": nucleotide_content_per_base['C'],
-                                                   "G": nucleotide_content_per_base['G'],
-                                                   "T": nucleotide_content_per_base['T']})
+                                                   "A": nucleotide_content_per_base['A'][:-1],
+                                                   "C": nucleotide_content_per_base['C'][:-1],
+                                                   "G": nucleotide_content_per_base['G'][:-1],
+                                                   "T": nucleotide_content_per_base['T'][:-1]})
     return nucleotide_content_per_base_df
 
 
@@ -28,9 +29,10 @@ def make_N_content_df(nucleotide_content_per_base):
     :return:
             N_content_per_base_df: pandas DataFrame, Position in read (bp), N content per position (%)
     '''
-    position_number_list = [i + 1 for i in range(len(nucleotide_content_per_base['A']))]
+    position_number_list =\
+        [i + 1 for i in range(len(nucleotide_content_per_base[list(nucleotide_content_per_base.keys())[0]][:-1]))]
     N_content_per_base_df = pd.DataFrame({"Position": position_number_list,
-                                          "N": nucleotide_content_per_base['N']})
+                                          "N": nucleotide_content_per_base['N'][:-1]})
     return N_content_per_base_df
 
 
