@@ -5,6 +5,12 @@ import matplotlib.ticker as ticker
 
 
 def make_nucleotide_content_df(nucleotide_content_per_base):
+    '''
+    Make Nucleotide content pandas DataFrame for "A", "C", "G" and "T"
+    :param nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
+    :return:
+            nucleotide_content_per_base_df: pandas DataFrame, Position in read (bp), Nucleotide content per position (%)
+    '''
     position_number_list = [i + 1 for i in range(len(nucleotide_content_per_base['A']))]
     nucleotide_content_per_base_df = pd.DataFrame({"Position": position_number_list,
                                                    "A": nucleotide_content_per_base['A'],
@@ -15,6 +21,12 @@ def make_nucleotide_content_df(nucleotide_content_per_base):
 
 
 def make_N_content_df(nucleotide_content_per_base):
+    '''
+    Make N content pandas DataFrame
+    :param nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
+    :return:
+            N_content_per_base_df: pandas DataFrame, Position in read (bp), N content per position (%)
+    '''
     position_number_list = [i + 1 for i in range(len(nucleotide_content_per_base['A']))]
     N_content_per_base_df = pd.DataFrame({"Position": position_number_list,
                                           "N": nucleotide_content_per_base['N']})
@@ -22,6 +34,13 @@ def make_N_content_df(nucleotide_content_per_base):
 
 
 def make_GC_content_df(gc_dic_rounded, gc_theor_dic_rounded):
+    '''
+    Make GC content pandas DataFrame
+    :param gc_dic_rounded: dic, GC content (%):	count in Experiment
+    :param gc_theor_dic_rounded: dic, GC content (%): count in Theoretical Distribution
+    :return:
+            GC_content_df: pandas DataFrame, GC content (%), count in Experiment, count in Theoretical Distribution
+    '''
     GC_content_rounded_df = pd.DataFrame({"GC content": gc_dic_rounded.keys(),
                                           "Number": gc_dic_rounded.values()})
     GC_content_theoretical_rounded_df = pd.DataFrame({"GC content": gc_theor_dic_rounded.keys(),
@@ -37,6 +56,11 @@ def make_GC_content_df(gc_dic_rounded, gc_theor_dic_rounded):
 
 
 def make_nucleotide_content_plot(nucleotide_content_per_base_df):
+    '''
+    Plot Sequence content across all bases
+    :param nucleotide_content_per_base_df: pandas DataFrame, Position in read (bp), Nucleotide content per position (%)
+    :return: plot
+    '''
     sns.set_style('whitegrid')
     fig, ax = plt.subplots()
     fig.set_size_inches(11.7, 8.27)
@@ -53,10 +77,14 @@ def make_nucleotide_content_plot(nucleotide_content_per_base_df):
     nucleotide_plot.set(title='Sequence content across all bases',
                         xlabel='Position in read (bp)', ylabel='Nucleotide content (%)')
     plt.savefig('./nucleotide_content.png', format='png', dpi=300)
-#    plt.show()
 
 
 def make_N_content_plot(N_content_per_base_df):
+    '''
+    Plot N content across all bases
+    :param N_content_per_base_df: pandas DataFrame, Position in read (bp), N content per position (%)
+    :return: plot
+    '''
     sns.set_style('whitegrid')
 
     fig, ax = plt.subplots()
@@ -72,10 +100,14 @@ def make_N_content_plot(N_content_per_base_df):
                           linewidth=1, dashes=False)
     N_plot.set(title='N content across all bases', xlabel='Position in read (bp)', ylabel='Nucleotide content (%)')
     plt.savefig('./N_content.png', format='png', dpi=300)
-#    plt.show()
 
 
 def make_GC_content_plot(GC_content_df):
+    '''
+    Plot GC distribution over all sequences
+    :param GC_content_df: pandas DataFrame, GC content (%),	count in Experiment, count in Theoretical Distribution
+    :return: plot
+    '''
     sns.set_style('whitegrid')
     fig, ax = plt.subplots()
     fig.set_size_inches(11.7, 8.27)
@@ -90,10 +122,16 @@ def make_GC_content_plot(GC_content_df):
     GC_content_plot.set(title='GC distribution over all sequences', xlabel='Mean GC content (%)',
                         ylabel='Number of reads')
     plt.savefig('./GC_content.png', format='png', dpi=300)
-#    plt.show()
 
 
 def make_nucleotide_and_gc_plots(nucleotide_content_per_base, gc_dic_rounded, gc_theor_dic_rounded):
+    '''
+    Calls and executes the functions that draw plots: Sequence content across all bases, N content across all bases,
+    GC distribution over all sequences and generates the pandas DataFrames necessary for this
+    :param nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
+    :param gc_dic_rounded: dic, GC content (%):	count in Experiment
+    :param gc_theor_dic_rounded: dic, GC content (%): count in Theoretical Distribution
+    '''
     nucleotide_content_per_base_df = make_nucleotide_content_df(nucleotide_content_per_base)
 
     N_content_per_base_df = make_N_content_df(nucleotide_content_per_base)
