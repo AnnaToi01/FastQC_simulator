@@ -1,28 +1,26 @@
 import subprocess
 import os
 
-def count_lines_in_file(filename):
+def count_lines_in_file(path_to_file):
     """Counts number of lines in text file
 
      NOTE! This function will be deleted after Anyas code deployment!!!"""
 
-    cmd = f"wc -l {filename}" + " | awk '{print $1}'"
+    cmd = f"wc -l {path_to_file}" + " | awk '{print $1}'"
     cmd_result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
     return int(cmd_result.stdout.decode())
 
-def preprocess(filename, mode="fast"):
+def preprocess(path_to_file, mode="fast"):
 
-    """ Takes file in fastq format. Extracts sequences from the file. Trim sequences higher than 75bp fi 50 bp.
-    Counts reads. Returns sorted counted reads (counted_reads.txt, sequences and count in the file) and reverse
-     counted reads (counted_reads_revere, only count in the file)
+    """
+    Preproceess isolate sequences from fast file, trim sequences with length >75 bp to 50bp,
+    count reads, then sort counted reads to 2 files: counted_reads.txt and counted_reads_reverse.txt
+    :param path_to_file: path to input file
+    :param mode: basic mode uses command line utilities for core calculations, fast mode uses
+    :return: returns None, genereates 2 files: counted_reads.txt and counted_reads_reverse.txt
+    """
 
-     2 modes availible:
-        - basic mode uses command line utilities to create counted_reads.txt and counted_reads_reverse.txt
-        - fast mode uses python code to create counted_reads.txt and counted_reads_reverse.txt
-
-        In theory fast mode requires more memory than basic, but basic mode is slower than fast mode"""
-
-    with open(f"{filename}") as reads, open("trimmed.txt", mode="w") as trim:
+    with open(f"{path_to_file}") as reads, open("trimmed.txt", mode="w") as trim:
         count = 0
         for line in reads:
             count += 1
@@ -57,16 +55,18 @@ def preprocess(filename, mode="fast"):
                 result_1.write(str(countings_list[i][1]) + "\n")
 
     os.remove("trimmed.txt")
-    return
+    return None
 
 
-def duplicates(filename): # will be taking nothing when Anays variable arrive
-    """Takes fastq file. Counts number of reads. Calculates duplications and distinct duplications.
-    Returns 2 lists of duplication levels and distinct duplication levels in procents and pecent_if_duplicated.
+def duplicates(total_reads):
+    """
+    Calculates duplications, distinct duplications and percent if duplicated (material
+    for Sequence Duplication Levels graph)
+    NOTE!  This function may be used only after preprocess function as it uses counted_reads.txt file
+    :param total_reads: total number of sequences in fastq file taken by preprocess
+    :return: frequency_procent, dist_frequency_procent, perc_if_dupl
+    """
 
-    NOTE!  This function may be used only after preprocess function as it uses counted_reads.txt file"""
-
-    total_reads = count_lines_in_file(filename) // 4  # Here must be Anays variable total_reads
     cmd = "wc -l counted_reads.txt | awk '{print $1}'"
     cmd_result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
     total_lines = int(cmd_result.stdout.decode())
@@ -109,14 +109,16 @@ def duplicates(filename): # will be taking nothing when Anays variable arrive
     return (frequency_procent, dist_frequency_procent, perc_if_dupl)
 
 
-def overrepresented_sequences(filename): # will be taking nothing when Anays variable arrive
-    """Takes fastq file. Search for overrepresented sequences (sequences with count above 0,1 of given fastq
-    file. Returns lists with sequences, counts, percentages (of reads to total_reads) and hits.
+def overrepresented_sequences(total_reads):
+    """
+    Search for overrepresented sequences (sequences with count above 0,1% of total reads in fastq
+    file given in preprocess)
+    NOTE!  This function may be used only after preprocess function as it uses
+    counted_reads_reverse.txt file
+    :param total_reads: total_reads: total number of sequences in fastq file taken by preprocess
+    :return: read_sequence, read_count, read_percentage,read_source
+    """
 
-     NOTE!  This function may be used only after preprocess
-     function as it uses counted_reads_reverse.txt file"""
-
-    total_reads = count_lines_in_file(filename) // 4  # Here must be Anays variable total_reads
     threshold = round(total_reads * 0.001)
     read_sequence = []
     read_count = []

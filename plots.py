@@ -3,10 +3,15 @@ import plotly.graph_objects as go
 
 
 def plot_table_of_overrepresent(read_sequence, read_count, read_percentage,read_source):
-
-    """Takes arguments from overrepresented_sequences function (calculations module). Saves png picture with
-     table of the overrepresented sequences"""
-
+    """
+    Plots a table of a overrepresented sequences. Takes parameters from overrepresented_sequences
+    function from calculations module.
+    :param read_sequence: sequence of the read that has presentation more than 0.1% of total reads
+    :param read_count: count of this sequence
+    :param read_percentage: percentage of count
+    :param read_source: source of sequence. Default: No hit
+    :return: None, generates table of overrepresented sequences
+    """
     if len(read_sequence) > 0:
         fig = go.Figure(data=[go.Table(
             header=dict(values=["Sequence", "Count", "Percentage", "Possible Source"],
@@ -19,17 +24,25 @@ def plot_table_of_overrepresent(read_sequence, read_count, read_percentage,read_
         ])
         fig.update_layout(width=890, height=235+20*len(read_sequence))
         fig.write_image("overrepresented.png")
-        return
+        return None
     plt.figure(figsize=(4, 1))
     plt.text(-0.1, 0.93, "Overrepresented sequences", color="#830006", fontsize=15)
     plt.text(-0.15, 0.75, "No overrepresented sequences", fontsize=8)
     plt.axis('off')
     plt.savefig("overrepresented.png", dpi=400)
-    return
+    return None
 
 def plot_duplications_and_distinct_duplications(frequency_procent, dist_frequency_procent, perc_if_dupl):
-    """Takes arguments from duplicates function (calculations module). Saves png picture with duplications and
-     distinct duplicatins"""
+    """
+    Plots Sequence Duplication Levels. Take arguments from duplicates function from calculations module
+    :param frequency_procent: list of values,each value is a procent of sequences with duplication
+    level less than value in x defined below
+    :param dist_frequency_procent:
+    :param frequency_procent: list of values,each value is a procent of distinct sequences with duplication
+    level less than value in x defined velow
+    :param perc_if_dupl: total unique reads/total reads
+    :return: None, generates Sequence Duplication Levels
+    """
 
     x = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ">10", ">50", ">100", ">500", ">1k", ">5k", ">10k"]
     y = frequency_procent[1:]
@@ -61,4 +74,4 @@ def plot_duplications_and_distinct_duplications(frequency_procent, dist_frequenc
     plt.text(12.542, 0.948, "% Total sequences", color="blue", fontsize=7)
 
     plt.savefig("doublicates.png", dpi=300)
-    return
+    return None
