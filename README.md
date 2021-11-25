@@ -5,9 +5,8 @@ FastQC is a program designed to do the quality control on raw sequence data comi
 ## Table of Contents
 1. [Team: Fasta and Curious](#Team)
 2. [Installation and Usage](#instaus): 
-3. [Example workflows](#example-workflows)
-4. [Test data](#test-data)
-5. [Software Requirements](#Software)
+3. [Test data](#test_data)
+4. [Software Requirements](#Software)
 
 <a name="Team"></a>
 ## Team: Fasta and Curious
@@ -118,9 +117,14 @@ $ python main.py -i <path_to_fastq> -o <path_to_ouptut_dir>  -a <path_to_adapter
 To show brief information about parameters execute following command:
 	$ python main.py -h
 
+<a name="test_data"></a>
+## Test data
+
+test file can be found in  
+gunzip the file before starting the program  
+results for test dara can be found 
 
 <a name="Software"></a>
-
 ## Software Requirements
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/python.svg height=20> Python 3.8
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/ubuntu.svg height = 20> Ubuntu 20.04 and 21.04
