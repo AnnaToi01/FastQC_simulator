@@ -4,10 +4,9 @@ FastQC is a program designed to do the quality control on raw sequence data comi
 
 ## Table of Contents
 1. [Team: Fasta and Curious](#Team)
-2. [Installation and Usage](#instaus): 
-3. [Example workflows](#example-workflows)
-4. [Test data](#test-data)
-5. [Software Requirements](#Software)
+2. [Installation and Usage](#instaus)
+3. [Test data](#test_data)
+4. [Software Requirements](#Software)
 
 <a name="Team"></a>
 ## Team: Fasta and Curious
@@ -46,10 +45,13 @@ Team:
 ## Installation and Usage
 
 ### Pipeline structure
-Pipeline is separated into several files:
-caclulations.py contains functions required for calculations
-plotting.py contains functions for plotting graphs
-main.py contains main piece pf code for running all computations
+Pipeline is separated into several files located in `scripts` folder:
+
+* `caclulations.py` contains functions required for calculations
+
+* `plotting.py` contains functions for plotting graphs
+
+* `main.py` contains main piece pf code for running all computations
 
 
 
@@ -57,11 +59,11 @@ main.py contains main piece pf code for running all computations
 ### Preliminary settings
 Clone repository
 ```
-git clone git@github.com:ipsemenov/FastQC_simulator.git
+$ git clone git@github.com:ipsemenov/FastQC_simulator.git
 ```
 Move to project directory 
 ```
-cd FastQC
+$ cd FastQC
 ```
 Set up virtual environment in working directory:
 1. Create virtual environment
@@ -69,33 +71,32 @@ Set up virtual environment in working directory:
 
        * Install virtualenv if it is not installed.
          ```
-         pip install virtualenv
+         $ pip install virtualenv
          ```
        * Create virtual environment
-        ```
-        virtualenv venv --python=3.8
-        ```
+         ```
+         $ virtualenv venv --python=3.8
+         ```
        * Activate it
-        ```
-        source ./venv/bin/activate
-        ```
+         ```
+         $ source ./venv/bin/activate
+         ```
     * Via `conda`
         * [Install Anaconda](https://docs.anaconda.com/anaconda/install/index.html)
         * Create virtual environment
-        ```
-        conda create --name <env_name> python=3.8
-        ```
+           ```
+           $ conda create --name <env_name> python=3.8
+           ```
         * Activate it
-        ```
-        conda activate <env_name>
-    ```
+           ```
+           $ conda activate <env_name>
 2. Install necessary libraries
  ```
- pip install -r requirements.txt
+$ pip install -r requirements.txt
  ```
 3. Install package wkhtmltopdf
 ```
-sudo apt-get install wkhtmltopdf
+$ sudo apt-get install wkhtmltopdf
 ```
 
 ### Console interface
@@ -107,31 +108,39 @@ This instrument is a console utility maintaining following parameters:
 ```
 
 
-
-
-
-
 ### Running utility
-
+Example workflow:
+```
 $ python main.py -i <path_to_fastq> -o <path_to_ouptut_dir>  -a <path_to_adapters> 
+```
+To show brief information about parameters, execute following command:
+```	
+$ python main.py -h
+```
 
-To show brief information about parameters execute following command:
-	$ python main.py -h
+<a name="test_data"></a>
+## Test data
 
+Test data can be found in `test_data/` folder. The `amp_res_1.fastq.gz` has to be unzipped:
+```
+$ gunzip amp_res_1.fastq.gz
+```
+Run the program on test data (from the `scripts` folder):
+```
+$ python main.py -i ../test_data/amp_res_1.fastq -o ../test_data/results -a ./adapters.txt
+```
+The test result, `results.pdf`, can be found in 'test_data/results', along with single images of the statistics modules.
 
 <a name="Software"></a>
-
 ## Software Requirements
+<img src=https://img.shields.io/badge/FastQC%20Simulator-FASTQ%20Quality%20Check-informational height = 20>
+
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/python.svg height=20> Python 3.8
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/ubuntu.svg height = 20> Ubuntu 20.04 and 21.04
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/git.svg height = 20> Git 2.30.2
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/markdown.svg height=20> Markdown
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/html5.svg height=20> HTML
 * <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/github.svg height=20> GitHub
+* <img src=https://github.com/simple-icons/simple-icons/blob/develop/icons/gnubash.svg height=20> Bash
 * Rest of the requirements are in requirements.txt.
 
-<img src=https://img.shields.io/badge/FastQC%20Simulator-FASTQ%20Quality%20Check-informational height = 20>
-
-
-
-  
