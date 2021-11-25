@@ -11,6 +11,9 @@ def calculate_read_length(path_to_file):
             max_length: int, maximum read length
             min_length: int, minimum read length
             total_reads: int, total count of reads
+            gc_content_list: list, GC content per read (%)
+            GC_mean: float, average GC content
+            nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read 
     '''
     length_dic = {}
 
@@ -42,6 +45,12 @@ def calculate_read_length(path_to_file):
 
 
 def get_nucleotide_content(nucleotide_per_position_dic):
+    '''
+    Make Nucleotide content per position in read (%) dictionary
+    :param nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read
+    :return:
+            nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
+    '''
     nucleotide_content_per_base = {}
     for position_number in nucleotide_per_position_dic:
         for var in {'A', 'C', 'G', 'T', 'N'}:
@@ -56,6 +65,12 @@ def get_nucleotide_content(nucleotide_per_position_dic):
 
 
 def get_GC_theoretical_distribution(gc_content_list):
+    '''
+    Make GC content Theoretical Distribution based on the sequencing data
+    :param gc_content_list: list, GC content per read (%)
+    :return:
+            GC_theoretical_distribution: list, GC content per read (%) obtained from Theoretical Distribution
+    '''
     GC_mode = statistics.mode(gc_content_list)
     GC_sd = statistics.stdev(gc_content_list)
     number_of_sequences = len(gc_content_list)
@@ -64,6 +79,12 @@ def get_GC_theoretical_distribution(gc_content_list):
 
 
 def make_GC_content_integer_rounding(gc_content_list):
+    '''
+    Make GC content integer rounding for further plotting
+    :param gc_content_list: list, GC content per read (%)
+    :return:
+            gc_dic_rounded: dic, GC content (%): count
+    '''
     gc_dic_rounded = {}
     for i in range(len(gc_content_list)):
         rounded = round(gc_content_list[i])
@@ -75,6 +96,15 @@ def make_GC_content_integer_rounding(gc_content_list):
 
 
 def make_GC_content_and_GC_theoretical_have_equal_length(gc_theor_dic_rounded, gc_dic_rounded):
+    '''
+    Make GC content in Experiment and Theoretical Distribution dictionaries have the same GC content range of values
+    and the same length for further merging in pandas DataFrame
+    :param gc_dic_rounded: dic, GC content (%):	count in Experiment
+    :param gc_theor_dic_rounded: dic, GC content (%): count in Theoretical Distribution
+    :return:
+            gc_dic_rounded: dic, GC content (%): count in Experiment
+            gc_theor_dic_rounded: dic, GC content (%): count in Theoretical Distribution
+    '''
     for gc in gc_dic_rounded:
         if gc not in gc_theor_dic_rounded:
             gc_theor_dic_rounded[gc] = 0
@@ -86,6 +116,16 @@ def make_GC_content_and_GC_theoretical_have_equal_length(gc_theor_dic_rounded, g
 
 
 def make_nucleotide_and_gc_calculations(gc_content_list, nucleotide_per_position_dic):
+    '''
+    Calls and executes the functions that perform data preprocessing for further drawing following plots: 
+    Sequence content across all bases, N content across all bases, GC distribution over all sequences
+    :param gc_content_list, list, GC content per read (%)
+    :param nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read 
+    :return:
+            nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
+            gc_dic_rounded: dic, GC content (%): count in Experiment
+            gc_theor_dic_rounded: dic, GC content (%): count in Theoretical Distribution
+    '''
     nucleotide_content_per_base = get_nucleotide_content(nucleotide_per_position_dic)
 
     GC_theoretical_distribution = get_GC_theoretical_distribution(gc_content_list)
