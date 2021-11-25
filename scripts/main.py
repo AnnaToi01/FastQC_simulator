@@ -1,5 +1,3 @@
-import os
-
 import calculations as calc
 import plotting as plot
 import argparse
@@ -104,19 +102,6 @@ if __name__ == '__main__':
         im_list_out.append(im.convert("RGB"))
 
     im_list_out[0].save(str(Path(args.output, "result.pdf")), save_all=True, append_images=im_list_out[1:])
-
-    # image1 = Image.open(Path(args.output, 'nucleotide_content.png'))
-    # image2 = Path(args.output, 'sequence_duplication_levels.png')
-    # image2 = Image.open(r'doublicates.png')
-    #
-    # im1 = image1.convert('RGB')
-    #
-    # im2 = image2.convert('RGB')
-    # imagelist = [im2]
-    #
-    # im1.save(r'result.pdf', save_all=True, append_images=imagelist)
-
-
     end_time = time.process_time()
     total_time = str(datetime.timedelta(seconds=end_time - start_time))
     logger.info('End fastq quality_control')

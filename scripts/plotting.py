@@ -329,9 +329,9 @@ def make_nucleotide_content_plot(nucleotide_content_per_base_df, output_dir):
     ax.yaxis.set_major_locator(plt.MaxNLocator(10))
     nucleotide_content_per_base_df_melted = nucleotide_content_per_base_df.melt('Position', var_name='Nucleotide',
                                                                                 value_name='vals')
-    nucleotide_plot = sns.lineplot(x="Position", y="vals", hue='Nucleotide',
-                                   data=nucleotide_content_per_base_df_melted, ax=ax, palette=palette,
-                                   linewidth=1, dashes=False)
+    sns.lineplot(x="Position", y="vals", hue='Nucleotide',
+                 data=nucleotide_content_per_base_df_melted, ax=ax, palette=palette,
+                 linewidth=1, dashes=False)
 
     ax.set_title(label='Sequence content across all bases', fontsize=14)
     ax.set_xlabel('Position in read (bp)', fontsize=14)
@@ -368,9 +368,9 @@ def make_N_content_plot(N_content_per_base_df, output_dir):
     plt.grid(axis="x")
     ax.yaxis.set_major_locator(plt.MaxNLocator(10))
     N_content_per_base_df_melted = N_content_per_base_df.melt('Position', var_name='Nucleotide', value_name='vals')
-    N_plot = sns.lineplot(x="Position", y="vals", hue='Nucleotide',
-                          data=N_content_per_base_df_melted, ax=ax, palette=palette,
-                          linewidth=1, dashes=False)
+    sns.lineplot(x="Position", y="vals", hue='Nucleotide',
+                 data=N_content_per_base_df_melted, ax=ax, palette=palette,
+                 linewidth=1, dashes=False)
     ax.set_title(label='N content across all bases', fontsize=14)
     ax.set_xlabel('Position in read (bp)', fontsize=14)
     ax.set_ylabel('Nucleotide content (%)', fontsize=14)
@@ -403,9 +403,8 @@ def make_GC_content_plot(GC_content_df, output_dir):
     ax.xaxis.set_major_formatter(mticker.ScalarFormatter())
     plt.grid(axis="x")
     GC_content_df_melted = GC_content_df.melt('GC', var_name='GC content', value_name='vals')
-    GC_content_plot = sns.lineplot(x="GC", y="vals", hue='GC content',
-                                   data=GC_content_df_melted, ax=ax, palette=palette,
-                                   linewidth=1, dashes=False)
+    sns.lineplot(x="GC", y="vals", hue='GC content', data=GC_content_df_melted,
+                 ax=ax, palette=palette, linewidth=1, dashes=False)
     ax.set_title(label='GC distribution over all sequences', fontsize=14)
     ax.set_xlabel('Mean GC content (%)', fontsize=14)
     ax.set_ylabel('Number of reads', fontsize=14)
@@ -480,7 +479,8 @@ def plot_duplications_and_distinct_duplications(frequency_procent, dist_frequenc
     for i in range(0, 16, 2):
         plt.axvspan(i + 0.5, i + 1.5, color="#e6e6e6", zorder=0)
     plt.grid(axis="x")
-    leg = plt.legend(labels=["% Total sequences", "% Deduplicated sequences"], handlelength=0, loc="upper right", borderaxespad=0, prop={'size': 14})
+    leg = plt.legend(labels=["% Total sequences", "% Deduplicated sequences"], handlelength=0,
+                     loc="upper right", borderaxespad=0, prop={'size': 14})
     for line, text in zip(leg.get_lines(), leg.get_texts()):
         text.set_color(line.get_color())
 
