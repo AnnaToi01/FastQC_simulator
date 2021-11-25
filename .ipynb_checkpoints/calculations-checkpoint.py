@@ -5,7 +5,6 @@ from collections import Counter
 import os
 from pathlib import Path
 import subprocess
-import logging
 
 
 def calc_quality_scores_per_pos(path_to_file, max_length):
@@ -153,17 +152,3 @@ def calc_quality_scores_per_read(path_to_file, total_reads, max_length, phred):
     mean_quality_per_read = [np.floor(val) if thres < val < max_quality else val for val in mean_quality_per_read]
     read_quality_dict = Counter(mean_quality_per_read)
     return read_quality_dict
-
-
-def SetLogger(logger_name):
-    """
-    Create custom logger and set its configuration
-    :param logger_name: name of created logger
-    """
-    logger = logging.getLogger('argparse')  # Create a custom logger
-    logger.setLevel(logging.INFO)
-    c_handler = logging.StreamHandler()  # Create handlers
-    c_handler.setLevel(logging.INFO)
-    c_format = logging.Formatter('%(levelname)s: %(message)s')  # Create formatters and add them to handlers
-    c_handler.setFormatter(c_format)
-    logger.addHandler(c_handler)  # Add handlers to the logger
