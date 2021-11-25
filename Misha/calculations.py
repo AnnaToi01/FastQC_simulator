@@ -13,7 +13,7 @@ def calculate_read_length(path_to_file):
             total_reads: int, total count of reads
             gc_content_list: list, GC content per read (%)
             GC_mean: float, average GC content
-            nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read 
+            nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read
     '''
     length_dic = {}
 
@@ -117,10 +117,10 @@ def make_GC_content_and_GC_theoretical_have_equal_length(gc_theor_dic_rounded, g
 
 def make_nucleotide_and_gc_calculations(gc_content_list, nucleotide_per_position_dic):
     '''
-    Calls and executes the functions that perform data preprocessing for further drawing following plots: 
+    Calls and executes the functions that perform data preprocessing for further drawing following plots:
     Sequence content across all bases, N content across all bases, GC distribution over all sequences
     :param gc_content_list, list, GC content per read (%)
-    :param nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read 
+    :param nucleotide_per_position_dic: dic, Position in read (bp): Nucleotide in this position per read
     :return:
             nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
             gc_dic_rounded: dic, GC content (%): count in Experiment

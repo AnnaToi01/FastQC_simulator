@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+from pathlib import Path
 
 
 def make_nucleotide_content_df(nucleotide_content_per_base):
@@ -55,10 +56,11 @@ def make_GC_content_df(gc_dic_rounded, gc_theor_dic_rounded):
     return GC_content_df
 
 
-def make_nucleotide_content_plot(nucleotide_content_per_base_df):
+def make_nucleotide_content_plot(nucleotide_content_per_base_df, output_dir):
     '''
     Plot Sequence content across all bases
     :param nucleotide_content_per_base_df: pandas DataFrame, Position in read (bp), Nucleotide content per position (%)
+    :param output_dir: str, path to output directory
     :return: plot
     '''
     sns.set_style('whitegrid')
@@ -76,13 +78,14 @@ def make_nucleotide_content_plot(nucleotide_content_per_base_df):
                                    linewidth=1, dashes=False)
     nucleotide_plot.set(title='Sequence content across all bases',
                         xlabel='Position in read (bp)', ylabel='Nucleotide content (%)')
-    plt.savefig('./nucleotide_content.png', format='png', dpi=300)
+    plt.savefig(Path(output_dir, 'nucleotide_content.png'), format='png', dpi=300)
 
 
-def make_N_content_plot(N_content_per_base_df):
+def make_N_content_plot(N_content_per_base_df, output_dir):
     '''
     Plot N content across all bases
     :param N_content_per_base_df: pandas DataFrame, Position in read (bp), N content per position (%)
+    :param output_dir: str, path to output directory
     :return: plot
     '''
     sns.set_style('whitegrid')
@@ -99,13 +102,14 @@ def make_N_content_plot(N_content_per_base_df):
                           data=N_content_per_base_df_melted, ax=ax, palette=palette,
                           linewidth=1, dashes=False)
     N_plot.set(title='N content across all bases', xlabel='Position in read (bp)', ylabel='Nucleotide content (%)')
-    plt.savefig('./N_content.png', format='png', dpi=300)
+    plt.savefig(Path(output_dir, 'N_content.png'), format='png', dpi=300)
 
 
-def make_GC_content_plot(GC_content_df):
+def make_GC_content_plot(GC_content_df, output_dir):
     '''
     Plot GC distribution over all sequences
     :param GC_content_df: pandas DataFrame, GC content (%),	count in Experiment, count in Theoretical Distribution
+    :param output_dir: str, path to output directory
     :return: plot
     '''
     sns.set_style('whitegrid')
@@ -121,16 +125,18 @@ def make_GC_content_plot(GC_content_df):
                                    linewidth=1, dashes=False)
     GC_content_plot.set(title='GC distribution over all sequences', xlabel='Mean GC content (%)',
                         ylabel='Number of reads')
-    plt.savefig('./GC_content.png', format='png', dpi=300)
+    plt.savefig(Path(output_dir, 'GC_content.png'), format='png', dpi=300)
 
 
-def make_nucleotide_and_gc_plots(nucleotide_content_per_base, gc_dic_rounded, gc_theor_dic_rounded):
+def make_nucleotide_and_gc_plots(nucleotide_content_per_base, gc_dic_rounded, gc_theor_dic_rounded, output_dir):
     '''
     Calls and executes the functions that draw plots: Sequence content across all bases, N content across all bases,
     GC distribution over all sequences and generates the pandas DataFrames necessary for this
     :param nucleotide_content_per_base: dic, Nucleotide: Nucleotide content per position in read (%)
     :param gc_dic_rounded: dic, GC content (%):	count in Experiment
     :param gc_theor_dic_rounded: dic, GC content (%): count in Theoretical Distribution
+    :param output_dir: str, path to output directory
+    :return: plots
     '''
     nucleotide_content_per_base_df = make_nucleotide_content_df(nucleotide_content_per_base)
 
@@ -138,8 +144,8 @@ def make_nucleotide_and_gc_plots(nucleotide_content_per_base, gc_dic_rounded, gc
 
     GC_content_df = make_GC_content_df(gc_dic_rounded, gc_theor_dic_rounded)
 
-    make_nucleotide_content_plot(nucleotide_content_per_base_df)
+    make_nucleotide_content_plot(nucleotide_content_per_base_df, output_dir)
 
-    make_N_content_plot(N_content_per_base_df)
+    make_N_content_plot(N_content_per_base_df, output_dir)
 
-    make_GC_content_plot(GC_content_df)
+    make_GC_content_plot(GC_content_df, output_dir)
